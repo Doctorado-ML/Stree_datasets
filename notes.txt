@@ -1,0 +1,44 @@
+iris.csv
+vehicle.csv
+wine.csv
+glass.csv
+heart.csv # spaces
+breast # 683 vs 690 samples in dataset
+diabetes # from Kaggle
+fourclass # taken from libsvm samples TKH96a Tin Kam Ho and Eugene M. Kleinberg.
+        #Building projectable classifiers of arbitrary complexity.
+        #In Proceedings of the 13th International Conference on Pattern Recognition, pages 880-885, Vienna, Austria, August 1996.
+segment # sparse libsvm para cargar X, y = np.load("data/segment.npy", allow_pickle=True) para leer .scale sklearn.datasets.load_svmlight_file
+letter
+sat (has to be satimage)
+usps # kaggle import h5py
+with h5py.File(path, 'r') as hf:
+        train = hf.get('train')
+        X_tr = train.get('data')[:]
+        y_tr = train.get('target')[:]
+        test = hf.get('test')
+        X_te = test.get('data')[:]
+        y_te = test.get('target')[:]
+
+pendigits
+protein # https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/multiclass.html#connect-4
+dna # openml
+connect 4 # https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/multiclass.html#connect-4
+ijcnn1 # libsvm https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/binary.html
+
+Datasets que hay que cargar X e y y son sparse matrices
+=======================================================
+(X, y= np.load("data/connect4.npy", allow_pickle=True))
+connect4
+fourclass
+ijcnn1
+protein
+segment
+vehicle
+
+from svmlight_loader import (load_svmlight_file, load_svmlight_files,
+                             dump_svmlight_file)
+
+para enlazar matrices sparse:
+from scipy.sparse import vstack
+X = vstack((Xs, Xt))

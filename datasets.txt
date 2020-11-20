@@ -1,0 +1,24 @@
+(#) Dataset   Samples  Feat. #Cl. y typ X type  f_type
+=== ========= ======== ===== ==== ===== ======= ======
+#01 breast         683     9    2 int16 int16   csv
+#02 cardiotoc    2,126    41    3 int16 int16   csv
+#03 cod-rna    331,152     8    2 int16 float16 sparse
+#04 connect4    67,557   126    3 int16 int16   sparse
+#05 covtype    581,012    54    7 int16 int16   npz
+#06 diabetes       768     8    2 int16 float16 csv
+#07 dna          3,186   180    3 int16 float16 csv
+#08 fourclass      862     2    2 int16 int16   sparse
+#09 glass          214     9    6 int16 float16 csv
+#10 heart          270    13    2 int16 float16 csv
+#11 ijcnn1     141,691    22    2 int16 float16 sparse
+#12 iris           150     4    3 int16 float16 csv
+#13 letter      20,000    16   26 int16 int16   npz
+#14 mnist       70,000   784   10 int16 int16   npy
+#15 pendigits   10,992    16   10 int16 int16   npy
+#16 protein     24,387   357    3 int16 float16 sparse
+#17 satimage     6,435    36    6 int16 int16   npy
+#18 segment      2,310    19    7 int16 float16 sparse
+#19 shuttle     58,000     9    7 int16 int16   npy
+#20 usps         9,298   256   10 int16 float16 npz
+#21 vehicle        846    18    4 int16 float16 sparse
+#22 wine           178    13    3 int16 float16 csv
