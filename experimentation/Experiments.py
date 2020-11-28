@@ -12,7 +12,12 @@ from .Sets import Datasets
 
 class Experiment:
     def __init__(
-        self, random_state: int, model: str, host: str, set_of_files: str
+        self,
+        random_state: int,
+        model: str,
+        host: str,
+        set_of_files: str,
+        kernel: str,
     ) -> None:
         self._random_state = random_state
         self._model_name = model
@@ -26,6 +31,7 @@ class Experiment:
         # used in gridsearch with ensembles to take best hyperparams of
         # base class or gridsearch these hyperparams as well
         self._base_params = "any"
+        self._kernel = kernel
 
     def set_base_params(self, base_params: str) -> None:
         self._base_params = base_params
@@ -73,6 +79,12 @@ class Experiment:
         """
         hyperparams = Hyperparameters(host=self._host, model=self._model_name)
         model = self._clf.get_model()
+        if self._kernel != "any":
+            # set parameters grid to only one kernel
+            if isinstance(self._clf, Models.Ensemble):
+                self._clf._base_model.select_params(self._kernel)
+            else:
+                self._clf.select_params(self._kernel)
         hyperparameters = self._clf.get_parameters()
         grid_type = "gridsearch"
         if (
@@ -111,7 +123,8 @@ class Experiment:
                 model,
                 return_train_score=True,
                 param_grid=hyperparameters,
-                n_jobs=-1,
+                n_jobs=1,
+                verbose=1,
             )
             start_time = time.time()
             grid_search.fit(X, y)

@@ -49,34 +49,45 @@ class ModelStree(ModelBase):
         gamma = [1e-1, 1, 1e1]
         max_features = [None, "auto"]
         split_criteria = ["impurity", "max_samples"]
+        self._linear = {
+            "random_state": [self._random_state],
+            "C": C,
+            "max_iter": max_iter,
+            "split_criteria": split_criteria,
+            "max_features": max_features,
+        }
+        self._poly = {
+            "random_state": [self._random_state],
+            "kernel": ["rbf"],
+            "C": C,
+            "gamma": gamma,
+            "max_iter": max_iter,
+            "split_criteria": split_criteria,
+            "max_features": max_features,
+        }
+        self._rbf = {
+            "random_state": [self._random_state],
+            "kernel": ["poly"],
+            "degree": [3, 5],
+            "C": C,
+            "gamma": gamma,
+            "max_iter": max_iter,
+            "split_criteria": split_criteria,
+            "max_features": max_features,
+        }
         self._param_grid = [
-            {
-                "random_state": [self._random_state],
-                "C": C,
-                "max_iter": max_iter,
-                "split_criteria": split_criteria,
-                "max_features": max_features,
-            },
-            {
-                "random_state": [self._random_state],
-                "kernel": ["rbf"],
-                "C": C,
-                "gamma": gamma,
-                "max_iter": max_iter,
-                "split_criteria": split_criteria,
-                "max_features": max_features,
-            },
-            {
-                "random_state": [self._random_state],
-                "kernel": ["poly"],
-                "degree": [3, 5],
-                "C": C,
-                "gamma": gamma,
-                "max_iter": max_iter,
-                "split_criteria": split_criteria,
-                "max_features": max_features,
-            },
+            self._linear,
+            self._poly,
+            self._rbf,
         ]
+
+    def select_params(self, kernel: str) -> None:
+        if kernel == "linear":
+            self._param_grid = [self._linear]
+        elif kernel == "poly":
+            self._param_grid = [self._poly]
+        else:
+            self._param_grid = [self._rbf]
 
 
 class ModelSVC(ModelBase):

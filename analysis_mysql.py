@@ -55,11 +55,24 @@ def report_line(line):
 
 
 def report_footer(agg):
-    print(TextColor.GREEN + f"we have better results {agg['better']:2d} times")
-    print(TextColor.RED + f"we have worse  results {agg['worse']:2d} times")
+    print(
+        TextColor.GREEN
+        + f"we have better results {agg['better']['items']:2d} times"
+    )
+    print(
+        TextColor.RED
+        + f"we have worse  results {agg['worse']['items']:2d} times"
+    )
     color = TextColor.LINE1
     for item in models:
-        print(color + f"{item:10s} used {agg[item]:2d} times")
+        print(
+            color + f"{item:10s} used {agg[item]['items']:2d} times ", end=""
+        )
+        print(
+            color + f"better {agg[item]['better']:2d} times ",
+            end="",
+        )
+        print(color + f"worse {agg[item]['worse']:2d} times ")
         color = (
             TextColor.LINE2 if color == TextColor.LINE1 else TextColor.LINE1
         )
@@ -77,7 +90,10 @@ for item in [
     "better",
     "worse",
 ] + models:
-    agg[item] = 0
+    agg[item] = {}
+    agg[item]["items"] = 0
+    agg[item]["better"] = 0
+    agg[item]["worse"] = 0
 for dataset in dt:
     find_one = False
     line = {"dataset": color + dataset[0]}
@@ -91,13 +107,15 @@ for dataset in dt:
             reference = record[10]
             accuracy = record[5]
             find_one = True
-            agg[model] += 1
+            agg[model]["items"] += 1
             if accuracy > reference:
                 sign = "+"
-                agg["better"] += 1
+                agg["better"]["items"] += 1
+                agg[model]["better"] += 1
             else:
                 sign = "-"
-                agg["worse"] += 1
+                agg["worse"]["items"] += 1
+                agg[model]["worse"] += 1
             item = f"{accuracy:9.7} {sign}"
             line["reference"] = f"{reference:9.7}"
             line[model] = (

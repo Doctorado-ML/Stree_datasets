@@ -48,6 +48,20 @@ def parse_arguments() -> Tuple[str, str, str, str, str, bool, bool, dict]:
         "report_cross}",
     )
     ap.add_argument(
+        "-k",
+        "--kernel",
+        type=str,
+        choices=[
+            "linear",
+            "poly",
+            "rbf",
+            "any",
+        ],
+        required=False,
+        default="any",
+        help="Kernel: {linear, poly, rbf, any} only used in gridsearch",
+    )
+    ap.add_argument(
         "-d",
         "--dataset",
         type=str,
@@ -88,6 +102,7 @@ def parse_arguments() -> Tuple[str, str, str, str, str, bool, bool, dict]:
         args.normalize,
         args.standardize,
         args.excludeparams,
+        args.kernel,
     )
 
 
@@ -100,10 +115,15 @@ def parse_arguments() -> Tuple[str, str, str, str, str, bool, bool, dict]:
     normalize,
     standardize,
     exclude_params,
+    kernel,
 ) = parse_arguments()
 
 experiment = Experiment(
-    random_state=1, model=model, host=host, set_of_files=set_of_files
+    random_state=1,
+    model=model,
+    host=host,
+    set_of_files=set_of_files,
+    kernel=kernel,
 )
 if experiment_type[0:6] == "report":
     bd = (
