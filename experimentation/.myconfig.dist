@@ -1,0 +1,5 @@
+host=<server>
+port=3306
+user=stree
+password=<password>
+database=stree_experiments
