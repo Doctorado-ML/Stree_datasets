@@ -19,4 +19,3 @@ statlog-german-credit
 statlog-image
 statlog-vehicle
 tic-tac-toe
-zoo
