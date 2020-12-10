@@ -3,9 +3,43 @@ import sqlite3
 from datetime import datetime
 from abc import ABC
 from typing import List
-
+import mysql.connector
+from ast import literal_eval as make_tuple
+from sshtunnel import SSHTunnelForwarder
 from .Models import ModelBase
-from .Utils import TextColor, MySQL
+from .Utils import TextColor
+
+
+class MySQL:
+    def __init__(self):
+        self.server = None
+
+    def get_connection(self):
+        config_db = dict()
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        with open(os.path.join(dir_path, ".myconfig")) as f:
+            for line in f.read().splitlines():
+                key, value = line.split("=")
+                config_db[key] = value
+        config_tunnel = dict()
+        with open(os.path.join(dir_path, ".tunnel")) as f:
+            for line in f.read().splitlines():
+                key, value = line.split("=")
+                config_tunnel[key] = value
+        config_tunnel["remote_bind_address"] = make_tuple(
+            config_tunnel["remote_bind_address"]
+        )
+        config_tunnel["ssh_address_or_host"] = make_tuple(
+            config_tunnel["ssh_address_or_host"]
+        )
+        self.server = SSHTunnelForwarder(**config_tunnel)
+        self.server.daemon_forward_servers = True
+        self.server.start()
+        config_db["port"] = self.server.local_bind_port
+        return mysql.connector.connect(**config_db)
+
+    def close(self):
+        self.server.close()
 
 
 class BD(ABC):
@@ -108,7 +142,8 @@ class BD(ABC):
         :param record: data to insert in database
         :type record: dict
         """
-        database = MySQL.get_connection()
+        dbh = MySQL()
+        database = dbh.get_connection()
         command_insert = (
             "replace into results (date, time, type, accuracy, "
             "dataset, classifier, norm, stand, parameters) values (%s, %s, "
@@ -131,6 +166,7 @@ class BD(ABC):
         cursor = database.cursor()
         cursor.execute(command_insert, values)
         database.commit()
+        dbh.close()
 
     def execute(self, command: str) -> None:
         c = self._con.cursor()

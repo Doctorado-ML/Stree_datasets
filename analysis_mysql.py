@@ -1,5 +1,6 @@
 from experimentation.Sets import Datasets
-from experimentation.Utils import TextColor, MySQL
+from experimentation.Utils import TextColor
+from experimentation.Database import MySQL
 
 models = ["stree", "odte", "adaBoost", "bagging"]
 title = "Best model results"
@@ -78,7 +79,8 @@ def report_footer(agg):
         )
 
 
-database = MySQL.get_connection()
+dbh = MySQL()
+database = dbh.get_connection()
 dt = Datasets(False, False, "tanveer")
 fields = ("Dataset", "Reference")
 for model in models:
@@ -131,3 +133,4 @@ for dataset in dt:
         )
         print(report_line(line))
 report_footer(agg)
+dbh.close()

@@ -36,6 +36,8 @@ setuptools.setup(
         "ipympl",
         "stree",
         "odte",
+        "sshtunnel",
+        "mysql-connector-python",
     ],
     zip_safe=False,
 )

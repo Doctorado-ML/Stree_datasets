@@ -32,22 +32,18 @@ def parse_arguments() -> Tuple[str, str, str, bool, bool]:
         default="aaai",
     )
     args = ap.parse_args()
-    return (
-        args.host,
-        args.model,
-        args.set_of_files,
-    )
+    return (args.host, args.model, args.set_of_files)
 
 
-(
-    host,
-    model,
-    set_of_files,
-) = parse_arguments()
+(host, model, set_of_files) = parse_arguments()
 datasets = Datasets(False, False, set_of_files)
 clf = None
 experiment = Experiment(
-    random_state=1, model=model, host=host, set_of_files=set_of_files
+    random_state=1,
+    model=model,
+    host=host,
+    set_of_files=set_of_files,
+    kernel="any",
 )
 for dataset in datasets:
     print(f"-Cross validation on {dataset[0]}")

@@ -1,7 +1,8 @@
 import argparse
 from typing import Tuple
 from experimentation.Sets import Datasets
-from experimentation.Utils import TextColor, MySQL
+from experimentation.Utils import TextColor
+from experimentation.Database import MySQL
 
 models = ["stree", "adaBoost", "bagging", "odte"]
 
@@ -114,7 +115,8 @@ def report_footer(agg):
     classifier,
     exclude_parameters,
 ) = parse_arguments()
-database = MySQL.get_connection()
+dbh = MySQL()
+database = dbh.get_connection()
 dt = Datasets(False, False, "tanveer")
 title = "Best Hyperparameters found for datasets"
 lengths = (10, 8, 10, 10, 30, 3, 3, 9, 11)
@@ -151,3 +153,4 @@ for dataset in dt:
         )
         print(color + report_line(record, agg))
 report_footer(agg)
+dbh.close()
