@@ -12,7 +12,7 @@ from .Utils import TextColor
 
 class MySQL:
     def __init__(self):
-        self.server = None
+        self._server = None
 
     def get_connection(self):
         config_db = dict()
@@ -32,14 +32,35 @@ class MySQL:
         config_tunnel["ssh_address_or_host"] = make_tuple(
             config_tunnel["ssh_address_or_host"]
         )
-        self.server = SSHTunnelForwarder(**config_tunnel)
-        self.server.daemon_forward_servers = True
-        self.server.start()
-        config_db["port"] = self.server.local_bind_port
-        return mysql.connector.connect(**config_db)
+        self._server = SSHTunnelForwarder(**config_tunnel)
+        self._server.daemon_forward_servers = True
+        self._server.start()
+        config_db["port"] = self._server.local_bind_port
+        self._database = mysql.connector.connect(**config_db)
+        return self._database
+
+    def find_best(self, dataset, classifier="any"):
+        cursor = self._database.cursor(buffered=True)
+        if classifier == "any":
+            command = (
+                f"select * from results r inner join reference e on "
+                f"r.dataset=e.dataset where r.dataset='{dataset}' "
+            )
+        else:
+            command = (
+                f"select * from results r inner join reference e on "
+                f"r.dataset=e.dataset where r.dataset='{dataset}' and "
+                f"classifier='{classifier}'"
+            )
+        command += (
+            " order by r.dataset, accuracy desc, classifier desc, "
+            "type, date, time"
+        )
+        cursor.execute(command)
+        return cursor.fetchone()
 
     def close(self):
-        self.server.close()
+        self._server.close()
 
 
 class BD(ABC):

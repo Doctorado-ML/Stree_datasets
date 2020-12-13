@@ -32,26 +32,6 @@ def parse_arguments() -> Tuple[str, str, str, bool, bool]:
     )
 
 
-def find_best(dataset):
-    cursor = database.cursor(buffered=True)
-    if classifier == "any":
-        command = (
-            f"select * from results r inner join reference e on "
-            f"r.dataset=e.dataset where r.dataset='{dataset}' "
-        )
-    else:
-        command = (
-            f"select * from results r inner join reference e on "
-            f"r.dataset=e.dataset where r.dataset='{dataset}' and classifier"
-            f"='{classifier}'"
-        )
-    command += (
-        " order by r.dataset, accuracy desc, classifier desc, type, date, time"
-    )
-    cursor.execute(command)
-    return cursor.fetchone()
-
-
 def report_header_content(title):
     length = sum(lengths) + len(lengths) - 1
     output = "\n" + "*" * length + "\n"
@@ -144,7 +124,7 @@ for item in [
 ] + models:
     agg[item] = 0
 for dataset in dt:
-    record = find_best(dataset[0])
+    record = dbh.find_best(dataset[0], classifier)
     if record is None:
         print(TextColor.FAIL + f"*No results found for {dataset[0]}")
     else:

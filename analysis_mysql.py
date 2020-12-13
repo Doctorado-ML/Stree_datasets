@@ -7,26 +7,6 @@ title = "Best model results"
 lengths = (30, 9, 11, 11, 11, 11)
 
 
-def find_best(dataset, classifier):
-    cursor = database.cursor(buffered=True)
-    if classifier == "any":
-        command = (
-            f"select * from results r inner join reference e on "
-            f"r.dataset=e.dataset where r.dataset='{dataset}' "
-        )
-    else:
-        command = (
-            f"select * from results r inner join reference e on "
-            f"r.dataset=e.dataset where r.dataset='{dataset}' and classifier"
-            f"='{classifier}'"
-        )
-    command += (
-        " order by r.dataset, accuracy desc, classifier desc, type, date, time"
-    )
-    cursor.execute(command)
-    return cursor.fetchone()
-
-
 def report_header_content(title):
     length = sum(lengths) + len(lengths) - 1
     output = "\n" + "*" * length + "\n"
@@ -99,10 +79,10 @@ for item in [
 for dataset in dt:
     find_one = False
     line = {"dataset": color + dataset[0]}
-    record = find_best(dataset[0], "any")
+    record = dbh.find_best(dataset[0], "any")
     max_accuracy = 0.0 if record is None else record[5]
     for model in models:
-        record = find_best(dataset[0], model)
+        record = dbh.find_best(dataset[0], model)
         if record is None:
             line[model] = color + "-" * 9 + "  "
         else:
