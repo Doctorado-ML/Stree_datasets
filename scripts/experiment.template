@@ -8,7 +8,7 @@
 ### mezcla errores con la salida principal
 #PBS -j oe
 ### Recursos
-#PBS -l select=2:ncpus=2:mem=16Gb
+#PBS -l select=2:ncpus=4:mem=32Gb
 ### Esportar variables de entorno
 #PBS -V
 ### Ejecutable con sus parametros
