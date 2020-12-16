@@ -123,7 +123,7 @@ class Experiment:
                 model,
                 return_train_score=True,
                 param_grid=hyperparameters,
-                n_jobs=1,
+                n_jobs=-1,
                 verbose=1,
             )
             start_time = time.time()

@@ -195,5 +195,6 @@ class ModelOdte(Ensemble):
             "max_samples": [0.2, 0.4, 0.8, 1.0],
             "n_estimators": [50, 100],
             "max_features": [0.2, 0.6, 1.0],
+            "n_jobs": [-1],
         }
         return super().get_parameters()
