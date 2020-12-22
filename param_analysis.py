@@ -131,8 +131,11 @@ class Aggregation:
             max_len = f"{len(max(agg_result.keys(), key=len))}s"
         except TypeError:
             max_len = "10.2f"
-        for key in sorted(agg_result):
-            print(f"{key:{max_len}} -> {agg_result[key]:2d} times")
+        try:
+            for key in sorted(agg_result):
+                print(f"{key:{max_len}} -> {agg_result[key]:2d} times")
+        except TypeError:
+            print(agg_result)
 
 
 def parse_arguments() -> Tuple[str, str, str, bool, bool]:
