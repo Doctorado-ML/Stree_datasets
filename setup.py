@@ -38,6 +38,7 @@ setuptools.setup(
         "odte",
         "sshtunnel",
         "mysql-connector-python",
+        "pandas",
     ],
     zip_safe=False,
 )

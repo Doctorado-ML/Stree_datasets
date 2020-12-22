@@ -1,9 +1,10 @@
 #!/bin/bash
-if [ "$1" = "" -o "$2" = "" -o "$3" = "" ] ; then
+if [ "$1" = "" -o "$2" = "" -o "$3" = "" -o "$4" = "" ] ; then
 	echo "Hay que seleccionar:"
     echo " - el tipo de experimento {gridsearch, gridbest, cross}"
     echo " - el modelo {stree, adaBoost, bagging, odte}"
     echo " - el kernel {linear, poly, rbf, any}"
+	echo " - el tipo de plataforma {pbs, slurm}"
 	exit 1
 fi
 if [[ ! "gridsearchgridbestcross"  == *$1* ]] ; then
@@ -18,8 +19,12 @@ if [[ ! "linearpolyrbfany"  == *$3* ]] ; then
 	echo "Hay que seleccionar el kernel {linear, poly, rbf, any}"
 	exit 1
 fi
+if [[ ! "pbsslurm"  == *$4* ]] ; then
+	echo "Hay que seleccionar la plataforma {pbs, slurm}"
+	exit 1
+fi
 script_path="$(pwd)/.."
-cp experiment.template experiment_$1.sh
+cp experiment.$4 experiment_$1.sh
 perl -i -pe"s/<model>/$2/g" experiment_$1.sh
 perl -i -pe"s~<folder>~$script_path~g" experiment_$1.sh
 perl -i -pe"s/<experiment>/$1/g" experiment_$1.sh
