@@ -2,3 +2,4 @@ ssh_address_or_host=(<host>, <port>)
 ssh_username=<user>
 ssh_private_key=<path_to>/id_rsa
 remote_bind_address=('127.0.0.1', 3306)
+enabled=1

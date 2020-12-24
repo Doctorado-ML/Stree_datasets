@@ -1,4 +1,5 @@
 host=<server>
+port=tunnel
 user=stree
 password=<password>
 database=stree_experiments

@@ -13,14 +13,13 @@ from .Utils import TextColor
 class MySQL:
     def __init__(self):
         self._server = None
-
-    def get_connection(self):
-        config_db = dict()
+        self._tunnel = False
+        self._config_db = dict()
         dir_path = os.path.dirname(os.path.realpath(__file__))
         with open(os.path.join(dir_path, ".myconfig")) as f:
             for line in f.read().splitlines():
                 key, value = line.split("=")
-                config_db[key] = value
+                self._config_db[key] = value
         config_tunnel = dict()
         with open(os.path.join(dir_path, ".tunnel")) as f:
             for line in f.read().splitlines():
@@ -32,11 +31,17 @@ class MySQL:
         config_tunnel["ssh_address_or_host"] = make_tuple(
             config_tunnel["ssh_address_or_host"]
         )
-        self._server = SSHTunnelForwarder(**config_tunnel)
-        self._server.daemon_forward_servers = True
-        self._server.start()
-        config_db["port"] = self._server.local_bind_port
-        self._database = mysql.connector.connect(**config_db)
+        self._tunnel = config_tunnel["enabled"] == "1"
+        if self._tunnel:
+            del config_tunnel["enabled"]
+            self._server = SSHTunnelForwarder(**config_tunnel)
+            self._server.daemon_forward_servers = True
+
+    def get_connection(self):
+        if self._tunnel:
+            self._server.start()
+            self._config_db["port"] = self._server.local_bind_port
+        self._database = mysql.connector.connect(**self._config_db)
         return self._database
 
     def find_best(self, dataset, classifier="any"):
@@ -60,7 +65,8 @@ class MySQL:
         return cursor.fetchone()
 
     def close(self):
-        self._server.close()
+        if self._tunnel:
+            self._server.close()
 
 
 class BD(ABC):
