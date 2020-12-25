@@ -1,16 +1,14 @@
 #!/bin/bash
 ### Nombre de trabajo
 #PBS -N <experiment>-<data>-<model>-<kernel>
-### Tiempo máximo de ejecución del trabajo
-#PBS -l walltime=96:00:00
 ### Seleccion de cola de trabajos
 #PBS -q workq
 ### mezcla errores con la salida principal
 #PBS -j oe
 ### Recursos
-#PBS -l select=2:ncpus=4:mem=16Gb
+#PBS -l select=1:ncpus=1:mem=16Gb
 ### Esportar variables de entorno
 #PBS -V
 ### Ejecutable con sus parametros
 cd <folder>
-python experiment.py -H galgo -e <experiment> -m <model> -d <data> -S tanveer -k <kernel> -n 1
+python experiment.py -H galgo -e <experiment> -m <model> -d <data> -S tanveer -k <kernel> -n 1 -t 4

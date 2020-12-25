@@ -9,4 +9,4 @@
 
 # LOAD MODULES, INSERT CODE, AND RUN YOUR PROGRAMS HERE
 cd <folder>
-python experiment.py -H galgo -e <experiment> -m <model> -d <data> -S tanveer -k <kernel> -n 1
+python experiment.py -H galgo -e <experiment> -m <model> -d <data> -S tanveer -k <kernel> -n 1 -t 4

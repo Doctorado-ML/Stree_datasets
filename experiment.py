@@ -92,6 +92,14 @@ def parse_arguments() -> Tuple[str, str, str, str, str, bool, bool, dict]:
         action="store_true",
         help="Exclude parameters in reports",
     )
+    ap.add_argument(
+        "-t",
+        "--threads",
+        default=-1,
+        type=int,
+        required=False,
+        help="Number of threads to use or -1 for available cores",
+    )
     args = ap.parse_args()
     return (
         args.host,
@@ -103,6 +111,7 @@ def parse_arguments() -> Tuple[str, str, str, str, str, bool, bool, dict]:
         args.standardize,
         args.excludeparams,
         args.kernel,
+        args.threads,
     )
 
 
@@ -116,6 +125,7 @@ def parse_arguments() -> Tuple[str, str, str, str, str, bool, bool, dict]:
     standardize,
     exclude_params,
     kernel,
+    threads,
 ) = parse_arguments()
 
 experiment = Experiment(
@@ -124,6 +134,7 @@ experiment = Experiment(
     host=host,
     set_of_files=set_of_files,
     kernel=kernel,
+    threads=threads,
 )
 if experiment_type[0:6] == "report":
     bd = (

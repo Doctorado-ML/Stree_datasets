@@ -18,6 +18,7 @@ class Experiment:
         host: str,
         set_of_files: str,
         kernel: str,
+        threads: int = -1,
     ) -> None:
         self._random_state = random_state
         self._set_model(model)
@@ -28,6 +29,7 @@ class Experiment:
         # base class or gridsearch these hyperparams as well
         self._base_params = "any"
         self._kernel = kernel
+        self._threads = threads
 
     def set_base_params(self, base_params: str) -> None:
         self._base_params = base_params
@@ -78,7 +80,7 @@ class Experiment:
             # Also affect subprocesses
             os.environ["PYTHONWARNINGS"] = "ignore"
             results = cross_validate(
-                model, X, y, return_train_score=True, n_jobs=-1
+                model, X, y, return_train_score=True, n_jobs=self._threads
             )
         outcomes = Outcomes(host=self._host, model=self._model_name)
         parameters = json.dumps(parameters, sort_keys=True)
@@ -139,7 +141,7 @@ class Experiment:
                 model,
                 return_train_score=True,
                 param_grid=hyperparameters,
-                n_jobs=-1,
+                n_jobs=self._threads,
                 verbose=1,
             )
             start_time = time.time()
