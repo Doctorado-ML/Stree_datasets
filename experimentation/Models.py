@@ -56,7 +56,7 @@ class ModelStree(ModelBase):
             "split_criteria": split_criteria,
             "max_features": max_features,
         }
-        self._poly = {
+        self._rbf = {
             "random_state": [self._random_state],
             "kernel": ["rbf"],
             "C": C,
@@ -65,7 +65,7 @@ class ModelStree(ModelBase):
             "split_criteria": split_criteria,
             "max_features": max_features,
         }
-        self._rbf = {
+        self._poly = {
             "random_state": [self._random_state],
             "kernel": ["poly"],
             "degree": [3, 5],
