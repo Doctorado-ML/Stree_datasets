@@ -186,6 +186,7 @@ class ModelOdte(Ensemble):
     def __init__(self, random_state: int, base_model=ModelStree) -> None:
         super().__init__(random_state, base_model=base_model(random_state))
         self._clf = Odte(
+            base_estimator=Stree(random_state),
             random_state=random_state,
         )
         self._model_name = f"Odte_{self._base_model.__class__.__name__}"
