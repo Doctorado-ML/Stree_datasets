@@ -6,9 +6,15 @@
 ### mezcla errores con la salida principal
 #PBS -j oe
 ### Recursos
-#PBS -l select=1:ncpus=1:mem=16Gb
+#PBS -l select=1:ncpus=16:mem=56Gb
+#PBS -l place=exclhost
 ### Esportar variables de entorno
 #PBS -V
+### Send email on end
+#PBS -m e
+### Specify mail recipient
+#PBS -M ricardo.montanana@alu.uclm.es
+
 ### Ejecutable con sus parametros
 cd <folder>
-python experiment.py -H galgo -e <experiment> -m <model> -d <data> -S tanveer -k <kernel> -n 1 -t 4
+python experiment.py -H galgo -e <experiment> -m <model> -d <data> -S tanveer -k <kernel> -n 1 -t 5

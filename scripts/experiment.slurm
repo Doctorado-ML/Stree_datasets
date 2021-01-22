@@ -5,7 +5,7 @@
 #SBATCH --nodes=1   # number of nodes
 #SBATCH -J "<experiment>-<data>-<model>-<kernel>"   # job name
 #SBATCH --mail-user=ricardo.montanana@alu.uclm.es   # email address
-#SBATCH --mail-type=END,FAIL
+#SBATCH --mail-type=END
 
 # LOAD MODULES, INSERT CODE, AND RUN YOUR PROGRAMS HERE
 cd <folder>
