@@ -157,7 +157,7 @@ class ModelAdaBoost(Ensemble):
         self._model_name = f"Adaboost_{self._base_model.__class__.__name__}"
 
     def get_parameters(self) -> List[dict]:
-        self._parameters = {"n_estimators": [50], "algorithm": ["SAMME"]}
+        self._parameters = {"n_estimators": [50, 100], "algorithm": ["SAMME"]}
         return super().get_parameters()
 
 

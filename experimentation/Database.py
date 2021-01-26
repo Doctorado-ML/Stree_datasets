@@ -49,13 +49,14 @@ class MySQL:
         if classifier == "any":
             command = (
                 f"select * from results r inner join reference e on "
-                f"r.dataset=e.dataset where r.dataset='{dataset}' "
+                f"r.dataset=e.dataset where r.dataset='{dataset}' and "
+                f"date>='2021-01-20'"
             )
         else:
             command = (
                 f"select * from results r inner join reference e on "
                 f"r.dataset=e.dataset where r.dataset='{dataset}' and "
-                f"classifier='{classifier}'"
+                f"classifier='{classifier}' and date>='2021-01-20'"
             )
         command += (
             " order by r.dataset, accuracy desc, classifier desc, "
